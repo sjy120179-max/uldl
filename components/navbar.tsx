@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { HoverButton } from '@/components/ui/hover-button';
 
 export const Navbar = () => {
@@ -20,9 +21,11 @@ export const Navbar = () => {
         </div>
 
         {/* Right side - Get Started Button */}
-        <HoverButton className="px-4 py-2 text-sm">
-          Get Started
-        </HoverButton>
+        <Link href="/auth">
+          <HoverButton className="px-4 py-2 text-sm">
+            Get Started
+          </HoverButton>
+        </Link>
       </div>
     </nav>
   );
