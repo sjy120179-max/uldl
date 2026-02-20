@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "uldl",
+  title: "AnyDrop",
   description: "upload anything, download anything",
 };
 

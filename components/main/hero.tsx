@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   motion,
   useMotionValue,
@@ -9,6 +9,9 @@ import {
 } from "framer-motion";
 import { cn } from '@/lib/utils';
 import { GlowButton } from '@/components/ui/glow-button';
+import { UploadModal } from '@/components/modals/upload-modal';
+import { DownloadModal } from '@/components/modals/download-modal';
+import { FileDisplayModal } from '@/components/modals/file-display-modal';
 
 /**
  * Custom SVG Icons
@@ -66,6 +69,12 @@ export const Hero = () => {
   const gridSize = 50; // Fixed grid size
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Modal states
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [isFileDisplayModalOpen, setIsFileDisplayModalOpen] = useState(false);
+  const [fileData, setFileData] = useState<any>(null);
+
   // Track mouse position with Motion Values for performance (avoids React re-renders)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -93,6 +102,25 @@ export const Hero = () => {
 
   // Create a dynamic radial mask for the "flashlight" effect
   const maskImage = useMotionTemplate`radial-gradient(300px circle at ${mouseX}px ${mouseY}px, black, transparent)`;
+
+  const handleCodeSubmit = async (code: string) => {
+    try {
+      const response = await fetch(`/api/anonymous-download?code=${code}`);
+
+      if (!response.ok) {
+        alert('Invalid code or file not found');
+        return;
+      }
+
+      const data = await response.json();
+      setFileData(data);
+      setIsDownloadModalOpen(false);
+      setIsFileDisplayModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching file:', error);
+      alert('Failed to fetch file');
+    }
+  };
 
   return (
     <div
@@ -138,12 +166,12 @@ export const Hero = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
-          <GlowButton variant="default">
+          <GlowButton variant="default" onClick={() => setIsUploadModalOpen(true)}>
             <UploadIcon className="w-5 h-5" />
             Upload
           </GlowButton>
 
-          <GlowButton variant="secondary">
+          <GlowButton variant="secondary" onClick={() => setIsDownloadModalOpen(true)}>
             <DownloadIcon className="w-5 h-5" />
             Download
           </GlowButton>
@@ -152,8 +180,24 @@ export const Hero = () => {
 
       {/* Footer Branding */}
       <footer className="absolute bottom-4 left-4 z-50 text-[10px] uppercase tracking-widest text-muted-foreground opacity-50 font-mono">
-        ULDL v1.0
+        AnyDrop v1.0
       </footer>
+
+      {/* Modals */}
+      <UploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+      />
+      <DownloadModal
+        isOpen={isDownloadModalOpen}
+        onClose={() => setIsDownloadModalOpen(false)}
+        onCodeSubmit={handleCodeSubmit}
+      />
+      <FileDisplayModal
+        isOpen={isFileDisplayModalOpen}
+        onClose={() => setIsFileDisplayModalOpen(false)}
+        fileData={fileData}
+      />
     </div>
   );
 };

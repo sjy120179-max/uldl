@@ -79,7 +79,7 @@ export default function AuthPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (!loading && user) {
-      router.push('/');
+      router.push('/dashboard');
     }
   }, [user, loading, router]);
 
@@ -138,14 +138,18 @@ export default function AuthPage() {
         "relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-background"
       )}
     >
-      {/* Back Button */}
-      <Link
-        href="/"
-        className="fixed top-6 left-6 z-50 flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors duration-200 group"
-      >
-        <ArrowLeftIcon className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" />
-        <span className="text-sm font-medium">Back</span>
-      </Link>
+      {/* Back Button Container */}
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+        <div className="mx-auto px-6 pt-8 pb-6" style={{ maxWidth: '1280px' }}>
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors duration-200 group w-fit pointer-events-auto"
+          >
+            <ArrowLeftIcon className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" />
+            <span className="text-sm font-medium">Back</span>
+          </Link>
+        </div>
+      </div>
 
       {/* Layer 1: Subtle background grid */}
       <div className="absolute inset-0 z-0 opacity-[0.08]">
@@ -173,7 +177,7 @@ export default function AuthPage() {
         <div className="flex items-center justify-center">
           <Image
             src="/uldl_icon_0.png"
-            alt="ULDL Icon"
+            alt="AnyDrop Icon"
             width={80}
             height={80}
             className="w-20 h-20 object-contain"
@@ -183,7 +187,7 @@ export default function AuthPage() {
         {/* Heading */}
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground drop-shadow-sm">
-            Welcome to ULDL
+            Welcome to AnyDrop
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground">
             Sign in to start sharing files seamlessly
@@ -220,7 +224,7 @@ export default function AuthPage() {
 
       {/* Footer Branding */}
       <footer className="absolute bottom-4 left-4 z-50 text-[10px] uppercase tracking-widest text-muted-foreground opacity-50 font-mono">
-        ULDL v1.0
+        AnyDrop v1.0
       </footer>
     </div>
   );

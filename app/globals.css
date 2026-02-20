@@ -116,3 +116,169 @@ body {
 .gradient-button-variant:active {
   transform: translateY(0) scale(0.98);
 }
+
+/* Custom Animations */
+@keyframes spin-slow {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+/* Gradient rotation animations */
+@keyframes gradient-rotate-1 {
+  from {
+    transform: translate(-50%, -50%) rotate(60deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(420deg);
+  }
+}
+
+@keyframes gradient-rotate-2 {
+  from {
+    transform: translate(-50%, -50%) rotate(82deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(442deg);
+  }
+}
+
+@keyframes gradient-rotate-3 {
+  from {
+    transform: translate(-50%, -50%) rotate(83deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(443deg);
+  }
+}
+
+@keyframes gradient-rotate-4 {
+  from {
+    transform: translate(-50%, -50%) rotate(70deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(430deg);
+  }
+}
+
+.animate-gradient-1 {
+  animation: gradient-rotate-1 8s linear infinite;
+}
+
+.animate-gradient-2 {
+  animation: gradient-rotate-2 8s linear infinite;
+}
+
+.animate-gradient-3 {
+  animation: gradient-rotate-3 8s linear infinite;
+}
+
+.animate-gradient-4 {
+  animation: gradient-rotate-4 8s linear infinite;
+}
+
+/* Gradient Upload Input Styles */
+.gradient-layer {
+  position: absolute;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+.gradient-layer::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  background-repeat: no-repeat;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 2s ease-in-out;
+}
+
+/* Layer animations on hover and focus */
+.gradient-upload-group:hover .gradient-layer-1::before {
+  transform: translate(-50%, -50%) rotate(-120deg);
+}
+
+.gradient-upload-group:focus-within .gradient-layer-1::before {
+  transform: translate(-50%, -50%) rotate(420deg);
+  transition-duration: 4s;
+}
+
+.gradient-upload-group:hover .gradient-layer-2::before,
+.gradient-upload-group:hover .gradient-layer-3::before,
+.gradient-upload-group:hover .gradient-layer-4::before {
+  transform: translate(-50%, -50%) rotate(-98deg);
+}
+
+.gradient-upload-group:focus-within .gradient-layer-2::before,
+.gradient-upload-group:focus-within .gradient-layer-3::before,
+.gradient-upload-group:focus-within .gradient-layer-4::before {
+  transform: translate(-50%, -50%) rotate(442deg);
+  transition-duration: 4s;
+}
+
+.gradient-upload-group:hover .gradient-layer-5::before {
+  transform: translate(-50%, -50%) rotate(-97deg);
+}
+
+.gradient-upload-group:focus-within .gradient-layer-5::before {
+  transform: translate(-50%, -50%) rotate(443deg);
+  transition-duration: 4s;
+}
+
+.gradient-upload-group:hover .gradient-layer-6::before {
+  transform: translate(-50%, -50%) rotate(-110deg);
+}
+
+.gradient-upload-group:focus-within .gradient-layer-6::before {
+  transform: translate(-50%, -50%) rotate(430deg);
+  transition-duration: 4s;
+}
+
+/* Dragging state */
+.gradient-upload-group.dragging .gradient-layer-1::before {
+  transform: translate(-50%, -50%) rotate(420deg);
+  transition-duration: 1s;
+}
+
+/* Specific gradient backgrounds */
+.gradient-layer-1::before {
+  width: 999px;
+  height: 999px;
+  transform: translate(-50%, -50%) rotate(60deg);
+  background: conic-gradient(#000, #402fb5 5%, #000 38%, #000 50%, #cf30aa 60%, #000 87%);
+}
+
+.gradient-layer-2::before,
+.gradient-layer-3::before,
+.gradient-layer-4::before {
+  width: 600px;
+  height: 600px;
+  transform: translate(-50%, -50%) rotate(82deg);
+  background: conic-gradient(rgba(0,0,0,0), #18116a, rgba(0,0,0,0) 10%, rgba(0,0,0,0) 50%, #6e1b60, rgba(0,0,0,0) 60%);
+}
+
+.gradient-layer-5::before {
+  width: 600px;
+  height: 600px;
+  transform: translate(-50%, -50%) rotate(83deg);
+  background: conic-gradient(rgba(0,0,0,0) 0%, #a099d8, rgba(0,0,0,0) 8%, rgba(0,0,0,0) 50%, #dfa2da, rgba(0,0,0,0) 58%);
+  filter: brightness(1.4);
+}
+
+.gradient-layer-6::before {
+  width: 600px;
+  height: 600px;
+  transform: translate(-50%, -50%) rotate(70deg);
+  background: conic-gradient(#1c191c, #402fb5 5%, #1c191c 14%, #1c191c 50%, #cf30aa 60%, #1c191c 64%);
+  filter: brightness(1.3);
+}
