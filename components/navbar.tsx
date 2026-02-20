@@ -87,7 +87,7 @@ export const Navbar = ({ user }: NavbarProps) => {
                     className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition-colors"
                   >
                     <FileText className="w-4 h-4" />
-                    <span className="text-sm font-medium">내 파일 관리</span>
+                    <span className="text-sm font-medium">My Files</span>
                   </Link>
                 </div>
 
