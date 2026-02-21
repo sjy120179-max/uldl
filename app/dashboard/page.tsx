@@ -20,18 +20,19 @@ export default function DashboardPage() {
   const [uploading, setUploading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const supabase = createClient();
 
   const ITEMS_PER_PAGE = 10;
 
-  // Redirect if not logged in
+  // Redirect if not logged in (but not during sign out)
   useEffect(() => {
-    if (!authLoading && !user) {
+    if (!authLoading && !user && !isSigningOut) {
       router.push('/auth');
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, router, isSigningOut]);
 
   // Fetch uploads
   const fetchUploads = useCallback(async (pageNum: number) => {
@@ -105,10 +106,12 @@ export default function DashboardPage() {
 
   const handleSignOut = async () => {
     try {
+      setIsSigningOut(true);
       await signOut();
       router.push('/');
     } catch (error) {
       console.error('Error signing out:', error);
+      setIsSigningOut(false);
     }
   };
 
@@ -117,6 +120,16 @@ export default function DashboardPage() {
 
     try {
       setUploading(true);
+
+      // Check total storage limit (999MB)
+      if (file) {
+        const { data: totalBytes } = await supabase.rpc('get_total_storage_bytes');
+        const MAX_STORAGE_BYTES = 999 * 1024 * 1024;
+        if ((totalBytes ?? 0) + file.size > MAX_STORAGE_BYTES) {
+          alert('Storage limit exceeded (999MB). Please try again later.');
+          return;
+        }
+      }
 
       let fileUrl: string | null = null;
       let fileName: string | null = null;
@@ -290,9 +303,8 @@ export default function DashboardPage() {
 
             {/* User Info & Actions */}
             <div className="flex items-center gap-4">
-              <div className="hidden sm:flex flex-col items-end">
-                <p className="text-sm font-medium text-foreground">{user.user_metadata?.full_name || user.email}</p>
-                <p className="text-xs text-muted-foreground">{user.email}</p>
+              <div className="hidden sm:block">
+                <p className="text-sm font-medium text-foreground">{user.email}</p>
               </div>
               <button
                 onClick={handleSignOut}

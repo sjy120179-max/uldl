@@ -217,8 +217,15 @@ export default function AuthPage() {
         )}
 
         {/* Additional Info */}
-        <p className="text-sm text-muted-foreground/80 max-w-md">
-          By signing in, you agree to our Terms of Service and Privacy Policy
+        <p className="text-sm text-muted-foreground/80 max-w-md pointer-events-auto">
+          By signing in, you agree to our{' '}
+          <Link href="/terms" className="underline hover:text-foreground transition-colors">
+            Terms of Service
+          </Link>{' '}
+          and{' '}
+          <Link href="/privacy" className="underline hover:text-foreground transition-colors">
+            Privacy Policy
+          </Link>
         </p>
       </div>
 
