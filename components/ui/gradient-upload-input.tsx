@@ -176,7 +176,7 @@ export function GradientUploadInput({
 
             {/* File Upload Button */}
             <div
-              className="absolute h-[42px] w-[40px] overflow-hidden top-[7px] right-[54px] rounded-lg cursor-pointer hover:scale-105 transition-transform"
+              className={`absolute h-[42px] w-[40px] overflow-hidden top-[7px] rounded-lg cursor-pointer hover:scale-105 transition-transform ${(value.trim() || selectedFile) ? 'right-[54px]' : 'right-[7px]'}`}
               onClick={() => fileInputRef.current?.click()}
             >
               <div

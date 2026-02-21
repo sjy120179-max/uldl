@@ -25,9 +25,9 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
       // Check total storage limit (999MB)
       if (file) {
         const { data: totalBytes } = await supabase.rpc('get_total_storage_bytes');
-        const MAX_STORAGE_BYTES = 999 * 1024 * 1024;
-        if ((totalBytes ?? 0) + file.size > MAX_STORAGE_BYTES) {
-          throw new Error('Storage limit exceeded (999MB). Please try again later.');
+        const MAX_STORAGE_BYTES = 990 * 1024 * 1024;
+        if ((totalBytes ?? 0) >= MAX_STORAGE_BYTES) {
+          throw new Error('Storage limit exceeded (990MB). Please try again later.');
         }
       }
 

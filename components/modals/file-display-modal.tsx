@@ -21,14 +21,23 @@ interface FileDisplayModalProps {
 export function FileDisplayModal({ isOpen, onClose, fileData }: FileDisplayModalProps) {
   if (!fileData) return null;
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (fileData.url && fileData.filename) {
-      const link = document.createElement('a');
-      link.href = fileData.url;
-      link.download = fileData.filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        const response = await fetch(fileData.url);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = fileData.filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      } catch (error) {
+        console.error('Download error:', error);
+        window.open(fileData.url, '_blank');
+      }
     }
   };
 

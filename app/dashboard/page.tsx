@@ -124,9 +124,9 @@ export default function DashboardPage() {
       // Check total storage limit (999MB)
       if (file) {
         const { data: totalBytes } = await supabase.rpc('get_total_storage_bytes');
-        const MAX_STORAGE_BYTES = 999 * 1024 * 1024;
-        if ((totalBytes ?? 0) + file.size > MAX_STORAGE_BYTES) {
-          alert('Storage limit exceeded (999MB). Please try again later.');
+        const MAX_STORAGE_BYTES = 990 * 1024 * 1024;
+        if ((totalBytes ?? 0) >= MAX_STORAGE_BYTES) {
+          alert('Storage limit exceeded (990MB). Please try again later.');
           return;
         }
       }
@@ -207,13 +207,22 @@ export default function DashboardPage() {
     }
   };
 
-  const handleDownload = (url: string, filename: string) => {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownload = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Download error:', error);
+      window.open(url, '_blank');
+    }
   };
 
   const handleDelete = async (upload: Upload) => {

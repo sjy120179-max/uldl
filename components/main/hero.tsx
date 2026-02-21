@@ -179,8 +179,11 @@ export const Hero = () => {
       </div>
 
       {/* Footer Branding */}
-      <footer className="absolute bottom-4 left-4 z-50 text-[10px] uppercase tracking-widest text-muted-foreground opacity-50 font-mono">
-        AnyDrop v1.0
+      <footer className="absolute bottom-4 left-4 right-4 z-50 flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground opacity-50 font-mono">
+        <span>AnyDrop v1.0</span>
+        <a href="mailto:contactanydrop@gmail.com" className="normal-case tracking-normal hover:text-foreground transition-colors">
+          contactanydrop@gmail.com
+        </a>
       </footer>
 
       {/* Modals */}
