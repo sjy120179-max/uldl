@@ -345,7 +345,7 @@ export default function DashboardPage() {
         )}
 
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-foreground mb-2">Your Uploads</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-2">My Files</h2>
           <p className="text-muted-foreground">Manage and view all your uploaded content</p>
         </div>
 
