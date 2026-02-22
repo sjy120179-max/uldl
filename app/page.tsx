@@ -16,7 +16,7 @@ export default function Home() {
   }
 
   return (
-    <main className="w-full relative min-h-screen">
+    <main className="w-full relative min-h-screen overflow-hidden">
       <Navbar user={user} />
       <Hero />
     </main>

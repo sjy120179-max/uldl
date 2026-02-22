@@ -123,7 +123,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-black/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl z-50 p-8"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-2xl bg-black/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl z-50 p-8"
           >
             {/* Close Button */}
             <button
@@ -137,7 +137,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
             <h2 className="text-2xl font-bold text-white mb-6">Upload File or Text</h2>
 
             {/* Upload Input */}
-            <div className="mb-6 flex justify-center">
+            <div className="mb-6">
               <GradientUploadInput
                 onSubmit={handleUpload}
                 maxFileSize={10}

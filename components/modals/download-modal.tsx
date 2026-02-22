@@ -102,7 +102,7 @@ export function DownloadModal({ isOpen, onClose, onCodeSubmit }: DownloadModalPr
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-black/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl z-50 p-8"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-md bg-black/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl z-50 px-4 py-6 sm:p-8"
           >
             {/* Close Button */}
             <button
@@ -121,7 +121,7 @@ export function DownloadModal({ isOpen, onClose, onCodeSubmit }: DownloadModalPr
             </div>
 
             {/* Code Input Fields */}
-            <div className="flex justify-center gap-2 mb-6">
+            <div className="flex justify-center gap-1 sm:gap-2 mb-6">
               {code.map((digit, index) => (
                 <input
                   key={index}
@@ -133,7 +133,7 @@ export function DownloadModal({ isOpen, onClose, onCodeSubmit }: DownloadModalPr
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
                   className={`
-                    w-10 h-12 text-center text-xl font-semibold rounded-lg border-2 transition-all duration-200
+                    flex-1 max-w-[40px] h-9 sm:h-12 text-center text-base sm:text-xl font-semibold rounded-lg border-2 transition-all duration-200
                     bg-white/5 border-white/20 text-white
                     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500
                     ${isComplete ? 'bg-purple-500/20 border-purple-500' : ''}

@@ -91,16 +91,16 @@ export function GradientUploadInput({
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center gap-4">
+    <div className="relative flex flex-col items-center justify-center gap-4 w-full">
       <div
-        className="relative flex items-center justify-center"
+        className="relative flex items-center justify-center w-full"
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         <div className="absolute w-full h-min-screen" style={{ zIndex: -1 }}></div>
-        <div id="poda" className="relative flex items-center justify-center group">
+        <div id="poda" className="relative flex items-center justify-center group w-full">
           {/* Layer 1 */}
           <div
             className="absolute overflow-hidden h-full w-full max-h-[70px] max-w-[450px] rounded-xl blur-[3px] gradient-layer-animated"
@@ -162,7 +162,7 @@ export function GradientUploadInput({
             />
           </div>
 
-          <div id="main" className="relative group" style={{ zIndex: 1 }}>
+          <div id="main" className="relative group w-full" style={{ zIndex: 1 }}>
             <input
               placeholder={placeholder}
               type="text"
@@ -170,7 +170,7 @@ export function GradientUploadInput({
               onChange={(e) => setValue(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={disabled}
-              className="bg-[#010201] border-none w-[437px] h-[56px] rounded-lg text-white px-[59px] pr-[100px] text-lg focus:outline-none placeholder-gray-400"
+              className="bg-[#010201] border-none w-full h-[56px] rounded-lg text-white px-[59px] pr-[100px] text-lg focus:outline-none placeholder-gray-400"
             />
             <div className="pointer-events-none w-[30px] h-[20px] absolute bg-[#cf30aa] top-[10px] left-[5px] blur-2xl opacity-80 transition-all duration-[2000ms] group-hover:opacity-0 group-focus-within:opacity-0"></div>
 

@@ -6,10 +6,11 @@ import { cn } from "@/lib/utils";
 interface GlowButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: "default" | "secondary";
+  wrapperClassName?: string;
 }
 
 export const GlowButton = React.forwardRef<HTMLButtonElement, GlowButtonProps>(
-  ({ children, variant = "default", className, ...props }, ref) => {
+  ({ children, variant = "default", className, wrapperClassName, ...props }, ref) => {
     const glowRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -39,7 +40,7 @@ export const GlowButton = React.forwardRef<HTMLButtonElement, GlowButtonProps>(
           }
         `}</style>
 
-        <div className="relative inline-flex items-center justify-center group">
+        <div className={cn("relative inline-flex items-center justify-center group", wrapperClassName)}>
           <div
             ref={glowRef}
             className={cn(

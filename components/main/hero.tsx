@@ -165,13 +165,13 @@ export const Hero = () => {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
-          <GlowButton variant="default" onClick={() => setIsUploadModalOpen(true)}>
+        <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto w-full sm:w-auto">
+          <GlowButton wrapperClassName="w-full sm:w-40" variant="default" className="w-full" onClick={() => setIsUploadModalOpen(true)}>
             <UploadIcon className="w-5 h-5" />
             Upload
           </GlowButton>
 
-          <GlowButton variant="secondary" onClick={() => setIsDownloadModalOpen(true)}>
+          <GlowButton wrapperClassName="w-full sm:w-40" variant="secondary" className="w-full" onClick={() => setIsDownloadModalOpen(true)}>
             <DownloadIcon className="w-5 h-5" />
             Download
           </GlowButton>
