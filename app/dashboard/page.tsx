@@ -115,14 +115,14 @@ export default function DashboardPage() {
     }
   };
 
-  const handleUpload = async (message: string, file?: File) => {
-    if (!user || (!message.trim() && !file)) return;
+  const handleUpload = async (message: string, files?: File[]) => {
+    if (!user || (!message.trim() && (!files || files.length === 0))) return;
 
     try {
       setUploading(true);
 
       // Check total storage limit (999MB)
-      if (file) {
+      if (files && files.length > 0) {
         const { data: totalBytes } = await supabase.rpc('get_total_storage_bytes');
         const MAX_STORAGE_BYTES = 990 * 1024 * 1024;
         if ((totalBytes ?? 0) >= MAX_STORAGE_BYTES) {
@@ -131,58 +131,61 @@ export default function DashboardPage() {
         }
       }
 
-      let fileUrl: string | null = null;
-      let fileName: string | null = null;
-      let thumbnailUrl: string | null = null;
-      let uploadType: 'file' | 'image' | 'text' = 'text';
+      if (files && files.length > 0) {
+        // Upload all files in parallel
+        await Promise.all(files.map(async (file) => {
+          const fileExt = file.name.split('.').pop();
+          const filePath = `${user.id}/${Date.now()}_${file.name}`;
 
-      // Upload file to Supabase Storage if present
-      if (file) {
-        const fileExt = file.name.split('.').pop();
-        const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+          const { error: uploadError } = await supabase.storage
+            .from('uploads')
+            .upload(filePath, file);
 
-        const { error: uploadError } = await supabase.storage
+          if (uploadError) {
+            console.error('Error uploading file:', uploadError);
+            throw new Error(`Failed to upload ${file.name}`);
+          }
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('uploads')
+            .getPublicUrl(filePath);
+
+          const uploadType = file.type.startsWith('image/') ? 'image' : 'file';
+
+          const { error: dbError } = await supabase
+            .from('uploads')
+            .insert({
+              user_id: user.id,
+              type: uploadType,
+              filename: file.name,
+              url: publicUrl,
+              text_content: message.trim() || null,
+              thumbnail_url: uploadType === 'image' ? publicUrl : null,
+            });
+
+          if (dbError) {
+            console.error('Error saving to database:', dbError);
+            throw new Error(`Failed to save ${file.name}`);
+          }
+        }));
+      } else {
+        // Text only
+        const { error: dbError } = await supabase
           .from('uploads')
-          .upload(filePath, file);
+          .insert({
+            user_id: user.id,
+            type: 'text',
+            filename: null,
+            url: null,
+            text_content: message.trim(),
+            thumbnail_url: null,
+          });
 
-        if (uploadError) {
-          console.error('Error uploading file:', uploadError);
-          alert('Failed to upload file');
+        if (dbError) {
+          console.error('Error saving to database:', dbError);
+          alert('Failed to save upload');
           return;
         }
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('uploads')
-          .getPublicUrl(filePath);
-
-        fileUrl = publicUrl;
-        fileName = file.name;
-
-        // Determine type
-        if (file.type.startsWith('image/')) {
-          uploadType = 'image';
-          thumbnailUrl = publicUrl;
-        } else {
-          uploadType = 'file';
-        }
-      }
-
-      // Insert into database
-      const { error: dbError } = await supabase
-        .from('uploads')
-        .insert({
-          user_id: user.id,
-          type: uploadType,
-          filename: fileName,
-          url: fileUrl,
-          text_content: message.trim() || null,
-          thumbnail_url: thumbnailUrl,
-        });
-
-      if (dbError) {
-        console.error('Error saving to database:', dbError);
-        alert('Failed to save upload');
-        return;
       }
 
       // Refresh the list
