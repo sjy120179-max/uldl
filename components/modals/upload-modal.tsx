@@ -12,86 +12,94 @@ interface UploadModalProps {
 }
 
 export function UploadModal({ isOpen, onClose }: UploadModalProps) {
-  const [uploadCode, setUploadCode] = useState<string | null>(null);
+  const [uploadCodes, setUploadCodes] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const supabase = createClient();
 
-  const handleUpload = async (message: string, file?: File) => {
-    if (!message.trim() && !file) return;
+  const handleUpload = async (message: string, files?: File[]) => {
+    if (!message.trim() && (!files || files.length === 0)) return;
 
     try {
       setUploading(true);
 
-      // Check total storage limit (999MB)
-      if (file) {
+      const expiresAt = new Date();
+      expiresAt.setHours(expiresAt.getHours() + 24);
+
+      if (files && files.length > 0) {
+        // Check total storage limit
         const { data: totalBytes } = await supabase.rpc('get_total_storage_bytes');
         const MAX_STORAGE_BYTES = 990 * 1024 * 1024;
         if ((totalBytes ?? 0) >= MAX_STORAGE_BYTES) {
           throw new Error('Storage limit exceeded (990MB). Please try again later.');
         }
-      }
 
-      // Generate 8-digit code
-      const code = Math.floor(10000000 + Math.random() * 90000000).toString();
+        // One code for all files
+        const code = Math.floor(10000000 + Math.random() * 90000000).toString();
 
-      let fileUrl: string | null = null;
-      let fileName: string | null = null;
-      let thumbnailUrl: string | null = null;
-      let uploadType: 'file' | 'image' | 'text' = 'text';
+        // Upload all files in parallel, sharing the same code
+        await Promise.all(files.map(async (file, index) => {
+          const fileExt = file.name.split('.').pop();
+          const filePath = `anonymous/${code}_${index}.${fileExt}`;
 
-      // Upload file to Supabase Storage directly from client
-      if (file) {
-        const fileExt = file.name.split('.').pop();
-        const filePath = `anonymous/${code}.${fileExt}`;
+          const { error: uploadError } = await supabase.storage
+            .from('uploads')
+            .upload(filePath, file);
 
-        const { error: uploadError } = await supabase.storage
+          if (uploadError) {
+            console.error('Storage upload error:', uploadError);
+            throw new Error(`Failed to upload ${file.name}`);
+          }
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('uploads')
+            .getPublicUrl(filePath);
+
+          const uploadType = file.type.startsWith('image/') ? 'image' : 'file';
+
+          const { error: dbError } = await supabase
+            .from('uploads')
+            .insert({
+              user_id: null,
+              type: uploadType,
+              filename: file.name,
+              url: publicUrl,
+              text_content: message.trim() || null,
+              thumbnail_url: uploadType === 'image' ? publicUrl : null,
+              code,
+              expires_at: expiresAt.toISOString(),
+            });
+
+          if (dbError) {
+            console.error('Database error:', dbError);
+            throw new Error(`Failed to save ${file.name}`);
+          }
+        }));
+
+        setUploadCodes([code]);
+      } else {
+        // Text only
+        const code = Math.floor(10000000 + Math.random() * 90000000).toString();
+
+        const { error: dbError } = await supabase
           .from('uploads')
-          .upload(filePath, file);
+          .insert({
+            user_id: null,
+            type: 'text',
+            filename: null,
+            url: null,
+            text_content: message.trim(),
+            thumbnail_url: null,
+            code,
+            expires_at: expiresAt.toISOString(),
+          });
 
-        if (uploadError) {
-          console.error('Storage upload error:', uploadError);
-          throw new Error('Failed to upload file');
+        if (dbError) {
+          console.error('Database error:', dbError);
+          throw new Error('Failed to save upload');
         }
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('uploads')
-          .getPublicUrl(filePath);
-
-        fileUrl = publicUrl;
-        fileName = file.name;
-
-        if (file.type.startsWith('image/')) {
-          uploadType = 'image';
-          thumbnailUrl = publicUrl;
-        } else {
-          uploadType = 'file';
-        }
+        setUploadCodes([code]);
       }
-
-      // Calculate expiration (24 hours)
-      const expiresAt = new Date();
-      expiresAt.setHours(expiresAt.getHours() + 24);
-
-      // Insert into database directly from client
-      const { error: dbError } = await supabase
-        .from('uploads')
-        .insert({
-          user_id: null,
-          type: uploadType,
-          filename: fileName,
-          url: fileUrl,
-          text_content: message.trim() || null,
-          thumbnail_url: thumbnailUrl,
-          code: code,
-          expires_at: expiresAt.toISOString(),
-        });
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        throw new Error('Failed to save upload');
-      }
-
-      setUploadCode(code);
     } catch (error) {
       console.error('Upload error:', error);
       alert(error instanceof Error ? error.message : 'Upload failed');
@@ -101,7 +109,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
   };
 
   const handleClose = () => {
-    setUploadCode(null);
+    setUploadCodes([]);
     onClose();
   };
 
@@ -153,7 +161,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
             )}
 
             {/* Upload Code Display */}
-            {uploadCode && (
+            {uploadCodes.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -162,11 +170,11 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                 <p className="text-sm text-white/70 mb-2 text-center">Your download code:</p>
                 <div className="flex items-center justify-center gap-3">
                   <code className="text-3xl font-mono font-bold text-white tracking-wider">
-                    {uploadCode}
+                    {uploadCodes[0]}
                   </code>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(uploadCode);
+                      navigator.clipboard.writeText(uploadCodes[0]);
                       alert('Code copied!');
                     }}
                     className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-colors"
@@ -175,7 +183,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                   </button>
                 </div>
                 <p className="text-xs text-white/50 mt-3 text-center">
-                  This file will be available for 24 hours
+                  Files are available for 24 hours
                 </p>
               </motion.div>
             )}

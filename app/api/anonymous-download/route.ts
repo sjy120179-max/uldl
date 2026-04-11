@@ -11,15 +11,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Code is required' }, { status: 400 });
     }
 
-    // Fetch upload by code
+    // Fetch all uploads by code (multiple files can share the same code)
     const { data, error } = await supabase
       .from('uploads')
       .select('*')
       .eq('code', code)
       .gt('expires_at', new Date().toISOString()) // Only get non-expired files
-      .single();
+      .order('created_at', { ascending: true });
 
-    if (error || !data) {
+    if (error || !data || data.length === 0) {
       return NextResponse.json({ error: 'Invalid code or file not found' }, { status: 404 });
     }
 

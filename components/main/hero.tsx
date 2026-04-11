@@ -112,7 +112,7 @@ export const Hero = () => {
         return;
       }
 
-      const data = await response.json();
+      const data = await response.json(); // now an array
       setFileData(data);
       setIsDownloadModalOpen(false);
       setIsFileDisplayModalOpen(true);

@@ -1,11 +1,22 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__supabase__execute_sql",
+      "Bash(npm run:*)",
+      "Bash(netstat -ano)",
+      "Bash(tasklist /FI \"PID eq 14340\")",
+      "Bash(cmd.exe /c \"tasklist /FI \"\"PID eq 14340\"\"\")",
+      "Bash(cmd.exe /c \"tasklist\")",
+      "Bash(cmd.exe /c \"for /f \"\"tokens=5\"\" %a in \\(''netstat -aon ^| findstr :3000 ^| findstr LISTENING''\\) do taskkill /F /PID %a\")",
+      "Bash(find c:/Users/user/Desktop/app -name *.sql -o -name migration*)",
+      "Bash(cmd.exe /c \"taskkill /F /PID 14340\")",
+      "Bash(cmd.exe /c \"for /f tokens^=5 %a in \\(''netstat -aon ^| findstr :3001 ^| findstr LISTENING''\\) do taskkill /F /PID %a\")",
+      "Bash(cmd.exe /c \"taskkill /F /PID 14340 & taskkill /F /PID 39400\")",
+      "Bash(powershell.exe -Command \"Stop-Process -Id 14340 -Force; Stop-Process -Id 39400 -Force\")"
+    ]
+  },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "supabase"
-  ],
-  "permissions": {
-    "allow": [
-      "mcp__supabase__execute_sql"
-    ]
-  }
+  ]
 }

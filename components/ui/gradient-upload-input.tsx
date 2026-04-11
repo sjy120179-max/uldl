@@ -4,11 +4,13 @@ import React, { useState, useRef } from 'react';
 import { Paperclip, X, Send, FileUp } from 'lucide-react';
 
 interface GradientUploadInputProps {
-  onSubmit?: (message: string, file?: File) => void;
+  onSubmit?: (message: string, files?: File[]) => void;
   maxFileSize?: number;
   disabled?: boolean;
   placeholder?: string;
 }
+
+const MAX_FILES = 5;
 
 export function GradientUploadInput({
   onSubmit,
@@ -17,24 +19,34 @@ export function GradientUploadInput({
   placeholder = "Upload file or enter text..."
 }: GradientUploadInputProps) {
   const [value, setValue] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = (file: File) => {
-    const fileSizeMB = file.size / (1024 * 1024);
-    if (fileSizeMB > maxFileSize) {
-      alert(`File size must be less than ${maxFileSize}MB`);
-      return;
-    }
-    setSelectedFile(file);
+  const handleFilesSelect = (newFiles: File[]) => {
+    const validFiles = newFiles.filter(file => {
+      const fileSizeMB = file.size / (1024 * 1024);
+      if (fileSizeMB > maxFileSize) {
+        alert(`${file.name}: File size must be less than ${maxFileSize}MB`);
+        return false;
+      }
+      return true;
+    });
+
+    setSelectedFiles(prev => {
+      const combined = [...prev, ...validFiles];
+      if (combined.length > MAX_FILES) {
+        alert(`Maximum ${MAX_FILES} files allowed`);
+        return combined.slice(0, MAX_FILES);
+      }
+      return combined;
+    });
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleFileSelect(file);
-    }
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) handleFilesSelect(files);
+    e.target.value = "";
   };
 
   const handleDragEnter = (e: React.DragEvent) => {
@@ -59,18 +71,16 @@ export function GradientUploadInput({
     e.stopPropagation();
     setIsDragging(false);
 
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
-      handleFileSelect(file);
-    }
+    const files = Array.from(e.dataTransfer.files || []);
+    if (files.length > 0) handleFilesSelect(files);
   };
 
   const handleSubmit = () => {
-    if (disabled || (!value.trim() && !selectedFile)) return;
+    if (disabled || (!value.trim() && selectedFiles.length === 0)) return;
 
-    onSubmit?.(value, selectedFile || undefined);
+    onSubmit?.(value, selectedFiles.length > 0 ? selectedFiles : undefined);
     setValue("");
-    setSelectedFile(null);
+    setSelectedFiles([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -83,11 +93,8 @@ export function GradientUploadInput({
     }
   };
 
-  const clearFile = () => {
-    setSelectedFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+  const clearFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -176,7 +183,7 @@ export function GradientUploadInput({
 
             {/* File Upload Button */}
             <div
-              className={`absolute h-[42px] w-[40px] overflow-hidden top-[7px] rounded-lg cursor-pointer hover:scale-105 transition-transform ${(value.trim() || selectedFile) ? 'right-[54px]' : 'right-[7px]'}`}
+              className={`absolute h-[42px] w-[40px] overflow-hidden top-[7px] rounded-lg cursor-pointer hover:scale-105 transition-transform ${(value.trim() || selectedFiles.length > 0) ? 'right-[54px]' : 'right-[7px]'}`}
               onClick={() => fileInputRef.current?.click()}
             >
               <div
@@ -198,10 +205,11 @@ export function GradientUploadInput({
               className="hidden"
               onChange={handleFileInputChange}
               accept="*"
+              multiple
             />
 
             {/* Submit Button */}
-            {(value.trim() || selectedFile) && (
+            {(value.trim() || selectedFiles.length > 0) && (
               <div
                 className="absolute h-[42px] w-[40px] overflow-hidden top-[7px] right-[7px] rounded-lg cursor-pointer hover:scale-105 transition-transform"
                 onClick={handleSubmit}
@@ -248,18 +256,22 @@ export function GradientUploadInput({
         )}
       </div>
 
-      {/* Selected File Display - below input */}
-      {selectedFile && (
-        <div className="flex items-center gap-2 bg-black/80 backdrop-blur-sm w-fit px-4 py-2 rounded-full border border-purple-500/30">
-          <FileUp className="w-4 h-4 text-purple-300" />
-          <span className="text-sm text-white">{selectedFile.name}</span>
-          <button
-            type="button"
-            onClick={clearFile}
-            className="ml-1 p-0.5 rounded-full hover:bg-white/10 transition-colors"
-          >
-            <X className="w-3 h-3 text-white" />
-          </button>
+      {/* Selected Files Display - below input */}
+      {selectedFiles.length > 0 && (
+        <div className="flex flex-wrap gap-2 w-full">
+          {selectedFiles.map((file, index) => (
+            <div key={index} className="flex items-center gap-2 bg-black/80 backdrop-blur-sm w-fit px-4 py-2 rounded-full border border-purple-500/30">
+              <FileUp className="w-4 h-4 text-purple-300" />
+              <span className="text-sm text-white">{file.name}</span>
+              <button
+                type="button"
+                onClick={() => clearFile(index)}
+                className="ml-1 p-0.5 rounded-full hover:bg-white/10 transition-colors"
+              >
+                <X className="w-3 h-3 text-white" />
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>
