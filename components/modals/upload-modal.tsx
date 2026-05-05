@@ -123,7 +123,8 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/60 z-50"
+            style={{ backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
           />
 
           {/* Modal */}
@@ -131,7 +132,8 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-2xl bg-black/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl z-50 p-8"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-2xl border border-white/10 rounded-2xl shadow-2xl z-50 p-8"
+            style={{ backgroundColor: "rgba(0,0,0,0.92)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
           >
             {/* Close Button */}
             <button
@@ -150,7 +152,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                 onSubmit={handleUpload}
                 maxFileSize={10}
                 disabled={uploading}
-                placeholder="Upload file or enter text..."
+                placeholder="Upload file or text..."
               />
             </div>
 

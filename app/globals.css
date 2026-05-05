@@ -77,6 +77,24 @@ body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  /* Prevent gradient banding on Android Chrome */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Full viewport height including Android Chrome address bar */
+.h-screen-safe {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* backdrop-filter fallback for Android Chrome < 76 */
+@supports not (backdrop-filter: blur(1px)) {
+  @supports not (-webkit-backdrop-filter: blur(1px)) {
+    [style*="backdropFilter"],
+    [style*="backdrop-filter"] {
+      background-color: rgba(0, 0, 0, 0.85) !important;
+    }
+  }
 }
 
 /* Gradient Button Styles */

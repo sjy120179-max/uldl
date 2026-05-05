@@ -127,8 +127,9 @@ export const Hero = () => {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       className={cn(
-        "relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-background"
+        "relative w-full flex flex-col items-center justify-center overflow-hidden bg-background"
       )}
+      style={{ minHeight: "100vh", minHeight: "100dvh" } as React.CSSProperties}
     >
       {/* Layer 1: Subtle background grid (always visible) */}
       <div className="absolute inset-0 z-0 opacity-[0.08]">
@@ -144,10 +145,10 @@ export const Hero = () => {
       </motion.div>
 
       {/* Decorative Blur Spheres */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute right-[-25%] top-[-25%] w-[50%] h-[50%] rounded-full bg-orange-500/50 dark:bg-orange-500/35 blur-[120px]" />
-        <div className="absolute right-[5%] top-[-15%] w-[30%] h-[30%] rounded-full bg-primary/40 dark:bg-primary/30 blur-[100px]" />
-        <div className="absolute left-[-15%] bottom-[-25%] w-[50%] h-[50%] rounded-full bg-blue-500/50 dark:bg-blue-500/35 blur-[120px]" />
+      <div className="absolute inset-0 pointer-events-none z-0" style={{ transform: "translateZ(0)" }}>
+        <div className="absolute right-[-10%] top-[-10%] w-[60%] h-[60%] rounded-full bg-orange-500/40 dark:bg-orange-500/30" style={{ filter: "blur(80px)", willChange: "transform", transform: "translateZ(0)" }} />
+        <div className="absolute right-[10%] top-[-5%] w-[35%] h-[35%] rounded-full bg-primary/35 dark:bg-primary/25" style={{ filter: "blur(70px)", willChange: "transform", transform: "translateZ(0)" }} />
+        <div className="absolute left-[-10%] bottom-[-10%] w-[60%] h-[60%] rounded-full bg-blue-500/40 dark:bg-blue-500/30" style={{ filter: "blur(80px)", willChange: "transform", transform: "translateZ(0)" }} />
       </div>
 
       {/* Content */}

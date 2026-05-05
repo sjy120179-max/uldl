@@ -61,13 +61,18 @@ export const GlowButton = React.forwardRef<HTMLButtonElement, GlowButtonProps>(
             ref={ref}
             className={cn(
               "relative inline-flex items-center justify-center gap-2",
-              "rounded-xl bg-white/10 px-6 py-3 text-sm font-medium text-white",
-              "backdrop-blur-md",
+              "rounded-xl px-6 py-3 text-sm font-medium text-white",
+              "border border-white/20",
               "transition-all duration-300",
-              "hover:bg-white/20",
+              "hover:bg-white/25 active:scale-95",
               "focus:outline-none focus:ring-2 focus:ring-white/40",
               className
             )}
+            style={{
+              backgroundColor: "rgba(255,255,255,0.12)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+            }}
             {...props}
           >
             {children}
