@@ -12,7 +12,17 @@
       "Bash(cmd.exe /c \"taskkill /F /PID 14340\")",
       "Bash(cmd.exe /c \"for /f tokens^=5 %a in \\(''netstat -aon ^| findstr :3001 ^| findstr LISTENING''\\) do taskkill /F /PID %a\")",
       "Bash(cmd.exe /c \"taskkill /F /PID 14340 & taskkill /F /PID 39400\")",
-      "Bash(powershell.exe -Command \"Stop-Process -Id 14340 -Force; Stop-Process -Id 39400 -Force\")"
+      "Bash(powershell.exe -Command \"Stop-Process -Id 14340 -Force; Stop-Process -Id 39400 -Force\")",
+      "PowerShell(Head -30)",
+      "Bash(mkdir -p /c/Users/user/Desktop/AnyDropApp/app/src/main/java/anydropit/app)",
+      "Bash(mkdir -p /c/Users/user/Desktop/AnyDropApp/app/src/main/res/values)",
+      "Bash(mkdir -p /c/Users/user/Desktop/AnyDropApp/app/src/main/res/xml)",
+      "Bash(mkdir -p /c/Users/user/Desktop/AnyDropApp/app/src/main/res/drawable)",
+      "Bash(mkdir -p /c/Users/user/Desktop/AnyDropApp/gradle/wrapper)",
+      "Bash(node /c/Users/user/Desktop/AnyDropApp/gen_icons.js)",
+      "Bash(node gen_icons.js)",
+      "Bash(node -e ' *)",
+      "Bash(xargs ls *)"
     ]
   },
   "enableAllProjectMcpServers": true,
