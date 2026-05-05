@@ -31,6 +31,14 @@ export const GlowButton = React.forwardRef<HTMLButtonElement, GlowButtonProps>(
       ? "from-indigo-500 via-purple-500 to-blue-500"
       : "from-purple-500 via-pink-500 to-violet-500";
 
+    const buttonBg = variant === "default"
+      ? "rgba(79,70,229,0.25)"
+      : "rgba(147,51,234,0.25)";
+
+    const buttonBorder = variant === "default"
+      ? "rgba(99,102,241,0.5)"
+      : "rgba(168,85,247,0.5)";
+
     return (
       <>
         <style>{`
@@ -62,16 +70,13 @@ export const GlowButton = React.forwardRef<HTMLButtonElement, GlowButtonProps>(
             className={cn(
               "relative inline-flex items-center justify-center gap-2",
               "rounded-xl px-6 py-3 text-sm font-medium text-white",
-              "border border-white/20",
-              "transition-all duration-300",
-              "hover:bg-white/25 active:scale-95",
+              "transition-all duration-300 active:scale-95",
               "focus:outline-none focus:ring-2 focus:ring-white/40",
               className
             )}
             style={{
-              backgroundColor: "rgba(255,255,255,0.12)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
+              backgroundColor: buttonBg,
+              border: `1px solid ${buttonBorder}`,
             }}
             {...props}
           >

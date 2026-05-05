@@ -204,7 +204,7 @@ export function GradientUploadInput({
               type="file"
               className="hidden"
               onChange={handleFileInputChange}
-              accept="*"
+              accept="image/*,video/*,audio/*,application/pdf,application/zip,application/x-zip-compressed,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,*/*"
               multiple
             />
 
@@ -260,13 +260,13 @@ export function GradientUploadInput({
       {selectedFiles.length > 0 && (
         <div className="flex flex-wrap gap-2 w-full">
           {selectedFiles.map((file, index) => (
-            <div key={index} className="flex items-center gap-2 bg-black/80 backdrop-blur-sm w-fit px-4 py-2 rounded-full border border-purple-500/30">
-              <FileUp className="w-4 h-4 text-purple-300" />
-              <span className="text-sm text-white">{file.name}</span>
+            <div key={index} className="flex items-start gap-2 bg-black/80 w-full sm:w-fit max-w-full px-4 py-2 rounded-xl border border-purple-500/30">
+              <FileUp className="w-4 h-4 text-purple-300 mt-0.5 shrink-0" />
+              <span className="text-sm text-white break-all min-w-0 flex-1">{file.name}</span>
               <button
                 type="button"
                 onClick={() => clearFile(index)}
-                className="ml-1 p-0.5 rounded-full hover:bg-white/10 transition-colors"
+                className="ml-1 p-0.5 rounded-full hover:bg-white/10 transition-colors shrink-0"
               >
                 <X className="w-3 h-3 text-white" />
               </button>
