@@ -179,7 +179,6 @@ export function GradientUploadInput({
               disabled={disabled}
               className="bg-[#010201] border-none w-full h-[56px] rounded-lg text-white px-[59px] pr-[100px] text-lg focus:outline-none placeholder-gray-400"
             />
-            <div className="pointer-events-none w-[30px] h-[20px] absolute bg-[#cf30aa] top-[10px] left-[5px] blur-2xl opacity-80 transition-all duration-[2000ms] group-hover:opacity-0 group-focus-within:opacity-0"></div>
 
             {/* File Upload Button */}
             <div

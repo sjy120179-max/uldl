@@ -123,7 +123,7 @@ export function DownloadModal({ isOpen, onClose, onCodeSubmit }: DownloadModalPr
             </div>
 
             {/* Code Input Fields */}
-            <div className="flex items-center justify-center gap-1 sm:gap-2 mb-6">
+            <div className="flex items-center justify-center gap-1 sm:gap-2 mb-6 w-full">
               {code.map((digit, index) => (
                 <input
                   key={index}
@@ -135,7 +135,8 @@ export function DownloadModal({ isOpen, onClose, onCodeSubmit }: DownloadModalPr
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
                   className={`
-                    flex-1 max-w-[40px] h-9 sm:h-12 text-center text-base sm:text-xl font-semibold rounded-lg border-2 transition-all duration-200
+                    w-7 h-8 sm:w-10 sm:h-12 shrink-0
+                    text-center text-sm sm:text-xl font-semibold rounded-lg border-2 transition-all duration-200
                     bg-white/5 border-white/20 text-white
                     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500
                     ${isComplete ? 'bg-purple-500/20 border-purple-500' : ''}
@@ -148,7 +149,7 @@ export function DownloadModal({ isOpen, onClose, onCodeSubmit }: DownloadModalPr
                 onClick={() => isComplete && handleSubmit(code.join(''))}
                 disabled={!isComplete}
                 className={`
-                  ml-1 h-9 w-9 sm:h-12 sm:w-12 shrink-0 flex items-center justify-center rounded-lg border-2 transition-all duration-200
+                  w-8 h-8 sm:w-12 sm:h-12 shrink-0 flex items-center justify-center rounded-lg border-2 transition-all duration-200
                   ${isComplete
                     ? 'bg-purple-500 border-purple-400 text-white hover:bg-purple-400 cursor-pointer'
                     : 'bg-white/5 border-white/20 text-white/30 cursor-not-allowed'}
