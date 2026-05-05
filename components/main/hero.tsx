@@ -129,7 +129,7 @@ export const Hero = () => {
       className={cn(
         "relative w-full flex flex-col items-center justify-center overflow-hidden bg-background"
       )}
-      style={{ minHeight: "100vh", minHeight: "100dvh" } as React.CSSProperties}
+      style={{ minHeight: "100dvh" } as React.CSSProperties}
     >
       {/* Layer 1: Subtle background grid (always visible) */}
       <div className="absolute inset-0 z-0 opacity-[0.08]">
