@@ -144,12 +144,17 @@ export const Hero = () => {
         <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} size={gridSize} />
       </motion.div>
 
-      {/* Decorative Blur Spheres */}
-      <div className="absolute inset-0 pointer-events-none z-0" style={{ transform: "translateZ(0)" }}>
-        <div className="absolute right-[-10%] top-[-10%] w-[60%] h-[60%] rounded-full bg-orange-500/40 dark:bg-orange-500/30" style={{ filter: "blur(80px)", willChange: "transform", transform: "translateZ(0)" }} />
-        <div className="absolute right-[10%] top-[-5%] w-[35%] h-[35%] rounded-full bg-primary/35 dark:bg-primary/25" style={{ filter: "blur(70px)", willChange: "transform", transform: "translateZ(0)" }} />
-        <div className="absolute left-[-10%] bottom-[-10%] w-[60%] h-[60%] rounded-full bg-blue-500/40 dark:bg-blue-500/30" style={{ filter: "blur(80px)", willChange: "transform", transform: "translateZ(0)" }} />
-      </div>
+      {/* Decorative Gradient Spheres */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: [
+            "radial-gradient(ellipse 60% 60% at 95% 0%, rgba(249,115,22,0.5) 0%, transparent 70%)",
+            "radial-gradient(ellipse 40% 40% at 80% -5%, rgba(99,102,241,0.45) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 60% at 0% 100%, rgba(59,130,246,0.5) 0%, transparent 70%)",
+          ].join(", "),
+        }}
+      />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto space-y-8 pointer-events-none">
