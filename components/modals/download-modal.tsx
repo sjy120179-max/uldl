@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface DownloadModalProps {
@@ -123,7 +123,7 @@ export function DownloadModal({ isOpen, onClose, onCodeSubmit }: DownloadModalPr
             </div>
 
             {/* Code Input Fields */}
-            <div className="flex justify-center gap-1 sm:gap-2 mb-6">
+            <div className="flex items-center justify-center gap-1 sm:gap-2 mb-6">
               {code.map((digit, index) => (
                 <input
                   key={index}
@@ -144,6 +144,18 @@ export function DownloadModal({ isOpen, onClose, onCodeSubmit }: DownloadModalPr
                   autoComplete="off"
                 />
               ))}
+              <button
+                onClick={() => isComplete && handleSubmit(code.join(''))}
+                disabled={!isComplete}
+                className={`
+                  ml-1 h-9 w-9 sm:h-12 sm:w-12 shrink-0 flex items-center justify-center rounded-lg border-2 transition-all duration-200
+                  ${isComplete
+                    ? 'bg-purple-500 border-purple-400 text-white hover:bg-purple-400 cursor-pointer'
+                    : 'bg-white/5 border-white/20 text-white/30 cursor-not-allowed'}
+                `}
+              >
+                <Check className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={3} />
+              </button>
             </div>
 
             {/* Action Buttons */}
